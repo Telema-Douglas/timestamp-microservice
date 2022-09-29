@@ -9,7 +9,7 @@ var app = express();
 // so that your API is remotely testable by FCC 
 var cors = require('cors');
 const { response } = require('express');
-app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
+app.use(cors({ optionsSuccessStatus: 200 }));  // some legacy browsers choke on 204
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
@@ -22,12 +22,12 @@ app.get("/", function (req, res) {
 
 // your first API endpoint... 
 app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'Hello API'});
+  res.json({ greeting: 'Hello API' });
 });
 
 
 errorResponse = (res, code, message) => {
-  return res.status(code).json({error:message})
+  return res.status(code).json({ error: message })
 }
 
 successResponse = (res, data) => {
@@ -35,7 +35,7 @@ successResponse = (res, data) => {
 }
 
 getUNIXDate = (date) => {
-  return date.getTime() / 1000;
+  return date.getTime();
 }
 
 getUTCDate = (date) => {
@@ -44,25 +44,30 @@ getUTCDate = (date) => {
 
 const INVALID_DATE = "Invalid Date";
 
-app.get("/api/:date", function(req,res){
+app.get("/api/:date", function (req, res) {
 
-    let inputString = req.params.date;
-   
-    let date;
-   
-    if(isNaN(inputString)){
-      date = new Date (inputString);
-    }else{
-      date = new Date(Number(inputString));
-    }
-    
-   
-    if(date == INVALID_DATE){
-      this.errorResponse(res, 400, INVALID_DATE);
-    }else{
-      return this.successResponse(res, {unix:Number(this.getUNIXDate(date)), utc:this.getUTCDate(date)});
-    }
+  let inputString = req.params.date;
 
+  let date;
+
+  if (isNaN(inputString)) {
+    date = new Date(inputString);
+  } else {
+    date = new Date(Number(inputString));
+  }
+
+
+  if (date == INVALID_DATE) {
+    this.errorResponse(res, 400, INVALID_DATE);
+  } else {
+    return this.successResponse(res, { unix: Number(this.getUNIXDate(date)), utc: this.getUTCDate(date) });
+  }
+
+})
+
+app.get("/api", function (req, res) {
+  let date = new Date();
+  return this.successResponse(res, { unix: Number(this.getUNIXDate(date)), utc: this.getUTCDate(date) });
 })
 
 
